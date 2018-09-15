@@ -22,9 +22,9 @@ export class BannerComponent implements OnInit {
 
   public estado: string = "visivel"
   public imagens: Imagem[] = [
-    {estado: 'escondido', url : '/assets/banner-acesso/img_1.png'},
+    {estado: 'visivel', url : '/assets/banner-acesso/img_1.png'},
     {estado: 'escondido', url : '/assets/banner-acesso/img_2.png'},
-    {estado: 'visivel', url : '/assets/banner-acesso/img_3.png'},
+    {estado: 'escondido', url : '/assets/banner-acesso/img_3.png'},
     {estado: 'escondido', url : '/assets/banner-acesso/img_4.png'},
     {estado: 'escondido', url : '/assets/banner-acesso/img_5.png'}
   ]
@@ -32,11 +32,22 @@ export class BannerComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    console.log(this.imagens)
+    setTimeout( () => this.logicaRotacao(),3000)
   }
 
-  public toggleEstado():void{
-    this.estado = (this.estado === 'visivel' ? 'escondido' : 'visivel');
+  public logicaRotacao():void{
+    let idx: number
+
+    for(let i:number = 0; i <= 4; i++){
+      if(this.imagens[i].estado === 'visivel'){
+        this.imagens[i].estado = 'escondido'
+
+        this.imagens[(i === 4 ? 0 : i+1)].estado = 'visivel'
+        
+        break
+      }
+    }
+    setTimeout( () => this.logicaRotacao(),3000)
   }
 
 }
