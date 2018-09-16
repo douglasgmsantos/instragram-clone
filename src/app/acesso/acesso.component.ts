@@ -15,7 +15,7 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
           opacity: 0,
           transform: "translate(-50px, 0px)"
         }),
-        animate('500ms 1s ease-in-out')
+        animate('500ms 0s ease-in-out')
       ])
     ])
   ]
