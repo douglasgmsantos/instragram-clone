@@ -17,7 +17,7 @@ export class LoginComponent implements OnInit {
     'senha': new FormControl(null,[Validators.required, Validators.minLength(6)]),
   });
 
-  public messageError = ""
+  public messageError:string = ""
   constructor(
     private auth:auth
   ) { }

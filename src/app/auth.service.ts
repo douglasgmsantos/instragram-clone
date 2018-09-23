@@ -21,9 +21,6 @@ export class auth{
             firebase.database().ref(`usuario_detalhe/${btoa(user.email)}`)
                 .set({user})
         })
-        .catch( (error:any) =>{
-            console.log(error)
-        })
     }
 
     public autenticar(email:string, senha:string):Promise<any>{

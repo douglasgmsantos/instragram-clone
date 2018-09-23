@@ -20,6 +20,8 @@ export class CadastroComponent implements OnInit {
     'nome_usuario': new FormControl(null, [Validators.required, Validators.minLength(6)]),
     'senha': new FormControl(null, [Validators.required, Validators.minLength(6)])
   })
+
+  public messageError:string = "";
   constructor(
     private auth: auth
   ) { }
@@ -43,6 +45,10 @@ export class CadastroComponent implements OnInit {
 
     this.auth.cadastrarUsuario(usuario)
       .then(() => this.exibirPainelLogin())
+      .catch( (error:any) =>{
+        console.log(error)
+        this.messageError = error.message
+    })
   }
 
 }
