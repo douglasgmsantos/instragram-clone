@@ -4,9 +4,9 @@ import * as firebase from 'firebase'
 
 export class auth{
 
-    public cadastrarUsuario(user:Usuario):void{
+    public cadastrarUsuario(user:Usuario):Promise<any>{
 
-        firebase.auth().createUserWithEmailAndPassword(user.email, user.senha)
+        return firebase.auth().createUserWithEmailAndPassword(user.email, user.senha)
         .then( (resposta:any) => {
 
             delete user.senha
