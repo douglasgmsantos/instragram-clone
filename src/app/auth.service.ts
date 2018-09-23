@@ -1,6 +1,7 @@
 import { Usuario } from "./acesso/usuario.model";
 
 import * as firebase from 'firebase'
+import { emit } from "cluster";
 
 export class auth{
 
@@ -16,6 +17,16 @@ export class auth{
         .catch( (error:any) =>{
             console.log(error)
         })
-        console.log("serviço", user)
+    }
+
+    public autenticar(email:string, senha:string):void{
+        console.log(email, senha)
+        firebase.auth().signInWithEmailAndPassword(email, senha)
+            .then( (resposta:any) => {
+                console.log(resposta)
+            })
+            .catch( (error:any) => {
+                console.log(error)
+            })
     }
 }
