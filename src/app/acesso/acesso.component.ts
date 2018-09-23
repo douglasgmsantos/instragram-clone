@@ -61,11 +61,11 @@ export class AcessoComponent implements OnInit {
   }
 
   public inicioDaAplicacao():void{
-    console.log("inicio")
+    // console.log("inicio")
   }
 
   public fimDaAplicacao():void{
-    console.log("fim")
+    // console.log("fim")
   }
 
 }
