@@ -1,7 +1,6 @@
 import { Usuario } from "./acesso/usuario.model";
 
 import * as firebase from 'firebase'
-import { emit } from "cluster";
 
 export class auth{
 
