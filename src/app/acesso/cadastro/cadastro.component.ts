@@ -3,12 +3,25 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 import {Usuario} from '../usuario.model'
 import { auth } from '../../auth.service';
+import { trigger, transition, animate, keyframes, style } from '@angular/animations';
 
 
 @Component({
   selector: 'app-cadastro',
   templateUrl: './cadastro.component.html',
-  styleUrls: ['./cadastro.component.css']
+  styleUrls: ['./cadastro.component.css'],
+  animations:[
+    trigger('notificacao-cadastro',[
+      transition("NAO-NOTIFICAR => NOTIFICAR",[
+        animate('700ms 0s ease-in-out', keyframes([
+          style({offset: 0.92, opacity: 1, transform: 'translateY(-10px)'}),
+          style({offset: 0.94, opacity: 1, transform: 'translateY(10px)'}),
+          style({offset: 0.96, opacity: 1, transform: 'translateY(-10px)'}),
+          style({offset: 0.98, opacity: 1, transform: 'translateY(10px)'}),
+        ]))
+      ])
+    ])
+  ]
 })
 export class CadastroComponent implements OnInit {
 
@@ -22,6 +35,7 @@ export class CadastroComponent implements OnInit {
   })
 
   public messageError:string = "";
+  public notificarPainel = "NAO-NOTIFICAR"
   constructor(
     private auth: auth
   ) { }
@@ -48,6 +62,7 @@ export class CadastroComponent implements OnInit {
       .catch( (error:any) =>{
         console.log(error)
         this.messageError = error.message
+        this.notificarPainel = "NOTIFICAR" 
     })
   }
 
