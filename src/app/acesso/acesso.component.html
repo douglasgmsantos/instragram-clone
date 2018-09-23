@@ -6,13 +6,13 @@
     </div>
 
     <div *ngIf="cadastro; else formLogin">
-      <div class="col-sm-6 d-flex justify-content-start" [@animacao-painel]="estadoPainel">
+      <div class="col-sm-6 d-flex justify-content-start" [@animacao-painel]="estadoPainel" (@animacao-painel.start)="inicioDaAplicacao()" (@animacao-painel.done)=fimDaAplicacao()>
         <app-cadastro (exibirPainel)="exibirPainel($event)"></app-cadastro>
       </div>
     </div>
 
     <ng-template #formLogin>
-      <div class="col-sm-6 d-flex justify-content-start" [@animacao-painel]="estadoPainel">
+      <div class="col-sm-6 d-flex justify-content-start" [@animacao-painel]="estadoPainel" (@animacao-painel.start)="inicioDaAplicacao()" (@animacao-painel.done)=fimDaAplicacao()>
         <app-login (exibirPainel)="exibirPainel($event)"></app-login>
       </div>  
     </ng-template>
