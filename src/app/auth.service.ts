@@ -26,9 +26,9 @@ export class auth{
         })
     }
 
-    public autenticar(email:string, senha:string):void{
+    public autenticar(email:string, senha:string):Promise<any>{
         console.log(email, senha)
-        firebase.auth().signInWithEmailAndPassword(email, senha)
+        return firebase.auth().signInWithEmailAndPassword(email, senha)
             .then( (resposta:any) => {
                 firebase.auth().currentUser.getIdToken()
                 .then( (idToken: string) =>{
@@ -36,9 +36,6 @@ export class auth{
                     localStorage.setItem("idToken", idToken)
                     this.router.navigate(['/home'])
                 })
-            })
-            .catch( (error:any) => {
-                console.log(error)
             })
     }
 
