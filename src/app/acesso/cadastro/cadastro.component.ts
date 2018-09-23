@@ -33,7 +33,6 @@ export class CadastroComponent implements OnInit {
 
 
   public cadastroUsuario():void{
-    console.log(this.formulario)
 
     let usuario: Usuario = new Usuario(
       this.formulario.value.email,
