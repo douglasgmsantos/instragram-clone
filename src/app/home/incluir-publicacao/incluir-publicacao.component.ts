@@ -1,10 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 
-import * as firebase from 'firebase'
+import * as firebase from 'firebase';
 
-import {Bd} from '../../bd.services'
+import {Bd} from '../../bd.services';
 import { Progresso } from '../../progress.service';
+import { Subject} from 'rxjs'
+import { Observable } from 'rxjs';
+import 'rxjs/add/observable/interval';
+import 'rxjs/Rx'
+
 
 @Component({
   selector: 'app-incluir-publicacao',
@@ -39,8 +44,22 @@ export class IncluirPublicacaoComponent implements OnInit {
       imagem: this.imagem
     });
 
-    console.log(this.progresso.status)
-    console.log(this.progresso.estado)
+    let acompanhamentoUpload = Observable.interval(500)
+    let continua = new Subject()
+
+    continua.next(true)
+
+    acompanhamentoUpload
+      .takeUntil(continua)
+      .subscribe( ()=>{
+        console.log(this.progresso.status)
+        console.log(this.progresso.estado)
+
+        if(this.progresso.status = 'CONCLUIDO'){
+          continua.next(false)
+        }
+      })
+
   }
 
   public preparaImagemUpload(event: Event):void{
