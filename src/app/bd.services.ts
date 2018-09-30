@@ -52,7 +52,6 @@ export class Bd{
             .orderByKey()
             .once('value')
             .then((snapshot:any) => {
-                console.log(snapshot.val())
 
                 let publicacoes: Array<any> = [];
 
