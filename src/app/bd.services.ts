@@ -49,6 +49,7 @@ export class Bd{
 
         return new Promise((resolve, reject)=>{
             firebase.database().ref(`publicacoes/${btoa(email)}`)
+            .orderByKey()
             .once('value')
             .then((snapshot:any) => {
                 console.log(snapshot.val())
@@ -57,13 +58,22 @@ export class Bd{
 
                 snapshot.forEach((childSnapshot:any) => {
                     let publicacao = childSnapshot.val()
+                    publicacao.key = childSnapshot.key
+                    publicacoes.push(publicacao)
                     
+                    
+                });
+                return publicacoes.reverse()
+            })
+            .then( (publicacoes: any) =>{
+
+                publicacoes.forEach((publicacao) => {
                     firebase.storage().ref()
-                    .child(`imagens/${childSnapshot.key}`)
+                    .child(`imagens/${publicacao.key}`)
                     .getDownloadURL()
                     .then((url:string)=>{
                         publicacao.url_imagem = url
-
+    
                         firebase.database().ref(`usuario_detalhe/${btoa(email)}`)
                         .once('value')
                         .then((snapshot: any) =>{
@@ -71,12 +81,11 @@ export class Bd{
                         })
                         publicacoes.push(publicacao)
                     })
-                });
-
+                })
+        
                 resolve(publicacoes)
             })
-        })
-
-        
+        })        
     }
+
 }
