@@ -2,9 +2,6 @@
 import * as firebase from 'firebase'
 import { Injectable } from '@angular/core';
 import { Progresso } from './progress.service';
-import { stringify } from '@angular/core/src/render3/util';
-import { PromiseState, reject } from 'q';
-import { resolve } from 'dns';
 
 @Injectable()
 export class Bd{
