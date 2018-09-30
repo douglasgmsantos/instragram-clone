@@ -2,6 +2,9 @@
 import * as firebase from 'firebase'
 import { Injectable } from '@angular/core';
 import { Progresso } from './progress.service';
+import { stringify } from '@angular/core/src/render3/util';
+import { PromiseState, reject } from 'q';
+import { resolve } from 'dns';
 
 @Injectable()
 export class Bd{
@@ -17,25 +20,63 @@ export class Bd{
         
         let nomeImagem = Date.now()
 
-        firebase.storage().ref()
+        firebase.database().ref(`publicacoes/${btoa(publicacao.email)}`)
+        .push({titulo: publicacao.titulo})
+        .then((resposta: any)=>{
+
+            let nomeImagem = resposta.key
+            firebase.storage().ref()
             .child(`imagens/${nomeImagem}`)
             .put(publicacao.imagem)
             .on(firebase.storage.TaskEvent.STATE_CHANGED,
                 (snapshot: any) => {
                     this.proresso.status = 'ANDAMENTO'
                     this.proresso.estado = snapshot
-                    console.log(snapshot)
                 },
                 (error: any) => {
                     this.proresso.status = 'ERROR'
-                    // console.log(error)
                 },
                 () =>{
                     this.proresso.status = 'CONCLUIDO'
-                    // console.log("upload concluído com sucesso.");
+
                 }
             )
-        // firebase.database().ref(`publicacoes/${btoa(publicacao.email)}`)
-        //     .push({titulo: publicacao.titulo})
+            
+        })
+    }
+
+    public consultaPublicacao(email:string):Promise<any>{
+
+        return new Promise((resolve, reject)=>{
+            firebase.database().ref(`publicacoes/${btoa(email)}`)
+            .once('value')
+            .then((snapshot:any) => {
+                console.log(snapshot.val())
+
+                let publicacoes: Array<any> = [];
+
+                snapshot.forEach((childSnapshot:any) => {
+                    let publicacao = childSnapshot.val()
+                    
+                    firebase.storage().ref()
+                    .child(`imagens/${childSnapshot.key}`)
+                    .getDownloadURL()
+                    .then((url:string)=>{
+                        publicacao.url_imagem = url
+
+                        firebase.database().ref(`usuario_detalhe/${btoa(email)}`)
+                        .once('value')
+                        .then((snapshot: any) =>{
+                            publicacao.name_usuario = snapshot.val().user.nome_usuario
+                        })
+                        publicacoes.push(publicacao)
+                    })
+                });
+
+                resolve(publicacoes)
+            })
+        })
+
+        
     }
 }

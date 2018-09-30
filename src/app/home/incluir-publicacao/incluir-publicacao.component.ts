@@ -19,6 +19,8 @@ import 'rxjs/Rx'
 export class IncluirPublicacaoComponent implements OnInit {
 
   public email: string;
+  public progressoPublicacao: string = 'PENDENTE'
+  public porcentagemUpload: number = 0
   private imagem: any;
 
   public formulario: FormGroup = new FormGroup({
@@ -44,7 +46,7 @@ export class IncluirPublicacaoComponent implements OnInit {
       imagem: this.imagem
     });
 
-    let acompanhamentoUpload = Observable.interval(500)
+    let acompanhamentoUpload = Observable.interval(1000)
     let continua = new Subject()
 
     continua.next(true)
@@ -52,10 +54,12 @@ export class IncluirPublicacaoComponent implements OnInit {
     acompanhamentoUpload
       .takeUntil(continua)
       .subscribe( ()=>{
-        console.log(this.progresso.status)
-        console.log(this.progresso.estado)
+        console.log(this.progresso)
+        this.porcentagemUpload = Math.round((this.progresso.estado.bytesTransferred / this.progresso.estado.totalBytes) *100)
+        this.progressoPublicacao = 'ANDAMENTO'
 
-        if(this.progresso.status = 'CONCLUIDO'){
+        if(this.progresso.status === 'CONCLUIDO'){
+          this.progressoPublicacao = 'CONCLUIDO'
           continua.next(false)
         }
       })
