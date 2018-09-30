@@ -19,6 +19,7 @@ import 'rxjs/Rx'
 export class IncluirPublicacaoComponent implements OnInit {
   @Output() public atualizarTimeLine: EventEmitter<any> = new EventEmitter<any>()
 
+  public messageModal:string = ''
   public email: string;
   public progressoPublicacao: string = 'PENDENTE'
   public porcentagemUpload: number = 0
@@ -49,22 +50,37 @@ export class IncluirPublicacaoComponent implements OnInit {
 
     let acompanhamentoUpload = Observable.interval(1000)
     let continua = new Subject()
+    let acompanhamentoMensagem = Observable.interval((1000)*30)
+
+    let continuaMensagem = new Subject()
 
     continua.next(true)
+    continuaMensagem.next(true)
 
     acompanhamentoUpload
       .takeUntil(continua)
       .subscribe( ()=>{
-        console.log(this.progresso)
         this.porcentagemUpload = Math.round((this.progresso.estado.bytesTransferred / this.progresso.estado.totalBytes) *100)
         this.progressoPublicacao = 'ANDAMENTO'
 
         if(this.progresso.status === 'CONCLUIDO'){
           this.progressoPublicacao = 'CONCLUIDO'
+          this.messageModal = 'A publicação foi concluída com sucesso!'
           this.atualizarTimeLine.emit()
           continua.next(false)
         }
       })
+
+      acompanhamentoMensagem
+        .takeUntil(continuaMensagem)
+        .subscribe( () => {
+          if(this.progresso.status === 'CONCLUIDO'){
+            this.progresso.status = 'PENDENTE'
+            this.progressoPublicacao = 'PENDENTE'
+            this.messageModal = ''
+            continuaMensagem.next(true)
+          }
+        })
 
   }
 

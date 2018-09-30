@@ -6,3 +6,7 @@
 .progress-bar{
     background: green;
 }
+
+input{
+    margin-top: 10px;
+}

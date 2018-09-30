@@ -1,16 +1,18 @@
-<!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-  Launch demo modal
-</button>
-
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
-    <div class="modal-content" *ngIf="progressoPublicacao == 'PENDENTE'">
+    <div class="modal-content" *ngIf="progressoPublicacao == 'PENDENTE'  || progressoPublicacao == 'CONCLUIDO'">
         <form [formGroup]="formulario" (ngSubmit)="publicar()">
           <div class="modal-header">
             <h5 class="modal-title" id="exampleModalLabel">Criar uma publicação</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+
+          <div class="alert alert-success alert-dismissible fade show " *ngIf="progressoPublicacao == 'CONCLUIDO'" role="alert">
+            {{messageModal}}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
@@ -47,22 +49,10 @@
         </div>
 
         <div class="modal-body">
-          Progresso: {{porcentagemUpload}}
+            <div class="progress">
+                <div class="progress-bar" role="progressbar" [ngStyle]="{'width.%': porcentagemUpload}"   aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">{{porcentagemUpload}}%</div>
+            </div>
         </div>
     </div>
-
-    <div class="modal-content" *ngIf="progressoPublicacao == 'CONCLUIDO'">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Publicação realizada com sucesso</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-
-        <div class="modal-body">
-            Sua publicação foi realizado com sucesso.
-        </div>
-    </div>
-
   </div>
 </div>
